@@ -49,7 +49,7 @@ class LoginRequest extends FormRequest
             $values['username'] = $this->email_or_username;
         }
 
-        if (!Auth::attempt($values, $this->boolean('remember'))) {
+        if (! Auth::attempt($values, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

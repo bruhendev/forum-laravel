@@ -1,5 +1,9 @@
 <h1>Teste</h1>
 
+@if (session('success'))
+    <p>{{ session('success') }}</p>
+@endif
+
 @if ($errors->any())
     <div>
         <ul>
@@ -12,11 +16,11 @@
 
 <form action="{{ route('questions.store') }}" method="POST">
     @csrf
-    <input type="text" name="subject"><br>
-    <textarea name="text" cols="30" rows="10"></textarea><br>
+    <input type="text" name="subject" value="{{ @old('subject') }}"><br>
+    <textarea name="text" cols="30" rows="10">{{ @old('text') }}</textarea><br>
     <select name="category_id">
         @foreach ($categories as $category)
-            <option value="{{ $category->id }}">{{ $category->name }}</option>
+            <option value="{{ $category->id }}" @if(@old('category_id') == $category->id) selected @endif>{{ $category->name }}</option>
         @endforeach
     </select><br>
     <button type="submit">Enviar</button>
