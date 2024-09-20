@@ -15,7 +15,9 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        $questions = Question::where('user_id', Auth::id())->get();;
+
+        return view('question.index', compact('questions'));
     }
 
     /**
@@ -25,7 +27,7 @@ class QuestionController extends Controller
     {
         $categories = Category::all();
 
-        return view('question.index', compact('categories'));
+        return view('question.create', compact('categories'));
     }
 
     /**
@@ -36,7 +38,7 @@ class QuestionController extends Controller
         $user = Auth::user();
         $user->questions()->create($request->validated());
 
-        return redirect()->route('questions.create')->with('success', 'Pergunta criada com sucesso!');
+        return redirect()->route('questions.index')->with('success', 'Pergunta criada com sucesso!');
     }
 
     /**
@@ -44,7 +46,7 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        //
+        return view('question.show', compact('question'));
     }
 
     /**
@@ -52,15 +54,19 @@ class QuestionController extends Controller
      */
     public function edit(Question $question)
     {
-        //
+        $categories = Category::all();
+
+        return view('question.edit', compact('categories','question'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Question $question)
+    public function update(StoreUpdateQuestionRequest $request, Question $question)
     {
-        //
+        $question->update($request->validated());
+
+        return redirect()->route('questions.index')->with('success','Pergunta atualizada com sucesso!');
     }
 
     /**
@@ -68,6 +74,8 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
-        //
+        $question->delete();
+
+        return redirect()->route('questions.index')->with('success', 'Pergunta excluida com sucesso!');
     }
 }
